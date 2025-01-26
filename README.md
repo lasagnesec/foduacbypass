@@ -4,3 +4,6 @@ It uses 3 manually executed commands from the CNA and a LOLBAS method to bypass 
 1. Has CNA that can be loaded in Cobalt Strike. Check `help foduacbypass`.<br>
 2. It uses 3 stages to bypass behavioral detection.<br>
 3. It uses LOLBAS wlrmdr.exe method to execute the implant and fodhelper.exe
+<p></p>
+regpersist.cna is a persistent method that registers your implant in the following registries: `Run`, `RunOnce`, `RunServices` and `RunServicesOnce`.
+
