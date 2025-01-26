@@ -6,4 +6,5 @@ It uses 3 manually executed commands from the CNA and a LOLBAS method to bypass 
 3. It uses LOLBAS wlrmdr.exe method to execute the implant and fodhelper.exe
 <p></p>
 regpersist.cna is a persistent method that registers your implant in the following registries: `Run`, `RunOnce`, `RunServices` and `RunServicesOnce`.
-
+<p></p>
+Compile using these methods: https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/beacon-object-files_how-to-develop.htm
