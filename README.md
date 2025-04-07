@@ -7,7 +7,12 @@ regpersist.cna is a persistent method that registers your implant in the followi
 2. It uses 3 stages to bypass behavioral detection.<br>
 3. It uses LOLBAS wlrmdr.exe method to execute the implant and fodhelper.exe
 
-Make with `make`, you know the drill
-Then, import the two aggressor scripts and you're good to go
+Make with `make`, then import the two aggressor scripts and you're good to go!
 
-foduacbypass.txt is a powershell base64 for importing into the exam environment
+foduacbypass.txt is a powershell base64 string for importing into the exam environment, drop it into `C:\Tools\` and run the following in powershell
+```
+$encodedPath = "C:\Tools\uacfodbypass.txt"
+$outputPath = "C:\Tools\uacfodbypass.zip"
+[IO.File]::WriteAllBytes($outputPath, [Convert]::FromBase64String((Get-Content $encodedPath -Raw)))
+Expand-Archive .\foduacbypass.zip
+```
